@@ -1,24 +1,21 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import styles from "./App.module.css";
+import { HashRouter,BrowserRouter, Route, Switch} from 'react-router-dom';
+import {HomePage,SignInPage,RegisterPage,DetailPage} from './pages';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className={styles.App}>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={HomePage}/>
+          <Route path='/signIn' component={SignInPage}/>
+          <Route path='/register' component={RegisterPage}/>
+          <Route path='/detail/:touristRouteId' component={DetailPage}/>
+          <Route render={()=><h1>404 not found 頁面去火星啦！</h1>} />
+          {/* 只要Route上不寫path，則任何定義以外的路徑都會導到這個路徑，且切記404路徑必須在所有路徑最後 */}
+        </Switch>
+      </BrowserRouter>
     </div>
   );
 }

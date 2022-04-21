@@ -5,7 +5,6 @@ import { Layout, Typography, Input, Menu, Button, Dropdown } from "antd";
 import { GlobalOutlined } from "@ant-design/icons";
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 import store, { RootState } from "../../redux/store";
-import { LanguageState } from "../../redux/language/languageReducer";
 import { withTranslation, WithTranslation } from "react-i18next";
 import {
   addLanguageActionCreator,
@@ -13,7 +12,6 @@ import {
 } from "../../redux/language/languageActions";
 import { connect } from 'react-redux';//HOC高階函式
 import { Dispatch } from 'redux';
-interface State extends LanguageState {};
 
 const mapStateToProps = (state:RootState) => {//將state作為props進行傳遞
   return {
@@ -49,18 +47,16 @@ class HeaderComponent extends React.Component<PropsType>{
   menuClickHandler=e=>{
     if(e.key === "new"){
       //處理新語言增加
-      const action = {
+      store.dispatch({
         type:"add_language",
         payload:{code:"new_language",name:"泰文"}
-      }
-      store.dispatch(action);
+      });
     }else{
       this.setState({language:e.key});
-      const action ={
+      store.dispatch({
         type:"change_language",
         payload:e.key
-      }
-      store.dispatch(action)
+      })
     }
   }
 

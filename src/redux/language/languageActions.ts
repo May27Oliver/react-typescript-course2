@@ -2,12 +2,12 @@ export const CHANGE_LANGUAGE = "change_language";
 export const ADD_LANGUAGE = "add_language"; 
 
 interface ChangeLanguageAction {
-    type: typeof CHANGE_LANGUAGE;
+    type: "change_language";
     payload: "zh" | "en";
 }
 
 interface AddLanguageAction {
-    type: typeof ADD_LANGUAGE;
+    type: "add_language";
     payload: { name:string; code:string };
 }
 

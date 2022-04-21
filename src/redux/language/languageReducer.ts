@@ -28,8 +28,24 @@ const languageReducer = (state= defaultState, action:LanguageActionTypes) => {
                 ...state,
                 languageList:[...state.languageList,action.payload]
             }
+        default:
+            return state;
     }
-    return state;
 }
 
+/*const reducer = (state=defaultState,action:ActionType)=>{
+    switch (action.type){
+        case TYPE_1:{
+            return {
+                ...state,
+            }
+        case TYPE_2:{
+            return {
+                ...state,
+            }
+        }
+        }
+    }
+}
+*/
 export default languageReducer

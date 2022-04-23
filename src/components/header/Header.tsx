@@ -5,45 +5,73 @@ import { Layout, Typography, Input, Menu, Button, Dropdown } from "antd";
 import { GlobalOutlined } from "@ant-design/icons";
 import {useHistory,useLocation,useParams,useRouteMatch} from 'react-router-dom';
 import store, { RootState } from "../../redux/store";
-import {connect,useSelector} from 'react-redux'
-import {  withTranslation, WithTranslation  } from "react-i18next";
 import {
   addLanguageActionCreator,
   changeLanguageActionCreator,
 } from "../../redux/language/languageActions";
-import { useTranslation } from "react-i18next";
-import { Dispatch } from 'redux';
+import {connect,useSelector,useDispatch} from 'react-redux'
+import {  withTranslation, WithTranslation,useTranslation  } from "react-i18next";
+// import {
+//   addLanguageActionCreator,
+//   changeLanguageActionCreator,
+// } from "../../redux/language/languageActions";
+// import { Dispatch } from 'redux';
 
-const mapStateToProps = (state:RootState) =>{
-  return {
-    language:state.language,
-    languageList:state.languageList
-  }
-}
-const mapDispatchToProps = (dispatch:Dispatch)=>{
-  return {
-    changeLanguage:(code:"zh" | "en") => {
-      const action = changeLanguageActionCreator(code);
-      dispatch(action);
-    },
-    addLanguage:(name:string,code:string) => {
-      const action = addLanguageActionCreator(name, code);
-      dispatch(action);
-    }
-  }
-}
-type PropsType =  
-  WithTranslation & //i18n類型
-  ReturnType<typeof mapStateToProps> &//redux store 映射類型
-  ReturnType<typeof mapDispatchToProps>;//redux dispatch 映射類型
+// const mapStateToProps = (state:RootState) =>{
+//   return {
+//     language:state.languageReducer.language,
+//     languageList:state.languageReducer.languageList
+//   }
+// }
+// const mapDispatchToProps = (dispatch:Dispatch)=>{
+//   return {
+//     changeLanguage:(code:"zh" | "en") => {
+//       const action = changeLanguageActionCreator(code);
+//       dispatch(action);
+//     },
+//     addLanguage:(name:string,code:string) => {
+//       const action = addLanguageActionCreator(name, code);
+//       dispatch(action);
+//     }
+//   }
+// }
+// type PropsType =  
+//   WithTranslation & //i18n類型
+//   ReturnType<typeof mapStateToProps> &//redux store 映射類型
+//   ReturnType<typeof mapDispatchToProps>;//redux dispatch 映射類型
 
-const HeaderComponent: React.FC<PropsType> = (props) => {
-  console.log("HeaderComponent props",props);
+export const Header: React.FC = (/*{ t , language, languageList}*/) => {
+  //React Router
   const history = useHistory();//獲取history資料
   const location = useLocation();//獲取location資料
   const params = useParams();//獲取params資料
   const match = useRouteMatch();//獲取match資料
-  const {language,languageList} = store.getState();
+  
+  //React-redux
+  //useSelector可以取代mapStateToProps
+  const {
+    languageReducer:
+    {
+      languageList,
+      language
+    }
+  } = useSelector((state:RootState)=>{
+      console.log('useSelector state',state);
+      return state;
+  })
+  //useDispatch可以取代mapDispatchToProps
+  const dispatch = useDispatch();
+  const menuClickHandler = (e)=>{
+    console.log("menuClickHandler e",e)
+    if(e.key === "new"){
+      dispatch(addLanguageActionCreator("new_language","泰文"));
+    }else{
+      dispatch(changeLanguageActionCreator(e.key))
+    }
+  }
+
+  //i18n
+  const { t } = useTranslation();
   return (
     <div className={styles["app-header"]}>
       {/* top-header */}
@@ -53,14 +81,14 @@ const HeaderComponent: React.FC<PropsType> = (props) => {
           <Dropdown.Button
             style={{ marginLeft: 15 }}
             overlay={
-              <Menu>
-                <Menu.Item>中文</Menu.Item>
-                <Menu.Item>English</Menu.Item>
+              <Menu onClick={(e)=>{menuClickHandler(e)}}>
+                {languageList.map(list=><Menu.Item key={list.code}>{list.name}</Menu.Item>)}
+                  <Menu.Item key={"new"}>{t("header.add_new_language")}</Menu.Item>
               </Menu>
             }
             icon={<GlobalOutlined />}
           >
-            語言
+            {language ==='zh'? "中文" : "English"}
           </Dropdown.Button>
           <Button.Group className={styles["button-group"]}>
             <Button onClick={()=>history.push('register')}>註冊</Button>
@@ -76,7 +104,7 @@ const HeaderComponent: React.FC<PropsType> = (props) => {
           </Typography.Title>
         </span>
         <Input.Search
-          placeholder={"请输入旅游目的地、主题、或关键字"}
+          placeholder={"請輸入旅遊目的地、主題、或關鍵字請輸入目的地"}
           className={styles["search-input"]}
         />
       </Layout.Header>
@@ -101,5 +129,6 @@ const HeaderComponent: React.FC<PropsType> = (props) => {
     </div>
   );
 };
+
 //使用react-redux connect去映射store，在還沒有hook的時代要這樣寫
-export const Header = connect(mapStateToProps,mapDispatchToProps)(withTranslation()(HeaderComponent))
+// export const Header = connect(mapStateToProps,mapDispatchToProps)(withTranslation()(HeaderComponent))

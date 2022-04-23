@@ -46,6 +46,6 @@ const languageReducer = (state= defaultState, action:LanguageActionTypes) => {
         }
         }
     }
-}
-*/
+}*/
+
 export default languageReducer

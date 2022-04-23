@@ -1,7 +1,13 @@
-import {createStore } from 'redux';
+import {createStore,combineReducers } from 'redux';
 import languageReducer from "./language/languageReducer";
 
-const store = createStore(languageReducer);//createStore第一個參數必須給予reducer。
+const store = createStore(
+    combineReducers(
+        {
+            languageReducer
+        }
+    )
+);//createStore第一個參數必須給予reducer。
 
 export type RootState = ReturnType<typeof store.getState> //ReturnType可以從函式反向獲得類型
 

@@ -15,3 +15,8 @@ mapStateToProps 及 mapDispatchToProps。 mapStateToProps 將 Redux Store 內的
 
 Redux hooks
 https://ithelp.ithome.com.tw/articles/10251966
+
+useSelector
+useDispatch
+useContext
+useReducer

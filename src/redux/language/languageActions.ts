@@ -2,17 +2,17 @@ export const CHANGE_LANGUAGE = "change_language";
 export const ADD_LANGUAGE = "add_language"; 
 
 interface ChangeLanguageAction {
-    type: "change_language";
+    type: typeof CHANGE_LANGUAGE;
     payload: "zh" | "en";
 }
 
 interface AddLanguageAction {
-    type: "add_language";
+    type: typeof ADD_LANGUAGE;
     payload: { name:string; code:string };
 }
 
 export type LanguageActionTypes = ChangeLanguageAction | AddLanguageAction;
-
+//為了降低Action過程中出錯的可能，於是採用工廠模式產生Action，俗稱ActionCreater
 export const changeLanguageActionCreator = (
     languageCode: "zh" | "en"
 ):ChangeLanguageAction => {

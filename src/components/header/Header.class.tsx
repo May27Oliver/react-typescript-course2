@@ -16,20 +16,18 @@ import { Dispatch } from 'redux';
 
 const mapStateToProps = (state:RootState) => {//將state作為props進行傳遞
   return {
-    language:state.language,
-    languageList:state.languageList
+    language:state.languageReducer.language,
+    languageList:state.languageReducer.languageList
   }
 }
 
 const mapDispatchToProps = ( dispatch:Dispatch ) => {
     return {
       changeLanguage:(code:"zh" | "en") => {
-        const action = changeLanguageActionCreator(code);
-        dispatch(action);
+        dispatch(changeLanguageActionCreator(code));
       },
       addLanguage:(name:string,code:string) => {
-        const action = addLanguageActionCreator(name, code);
-        dispatch(action);
+        dispatch(addLanguageActionCreator(name, code));
       }
     }
 }
@@ -48,16 +46,9 @@ class HeaderComponent extends React.Component<PropsType>{
   menuClickHandler=e=>{
     if(e.key === "new"){
       //處理新語言增加
-      store.dispatch({
-        type:"add_language",
-        payload:{code:"new_language",name:"泰文"}
-      });
+      this.props.addLanguage("泰文","new_language");
     }else{
-      this.setState({language:e.key});
-      store.dispatch({
-        type:"change_language",
-        payload:e.key
-      })
+      this.props.changeLanguage(e.key)
     }
   }
 
@@ -124,6 +115,6 @@ class HeaderComponent extends React.Component<PropsType>{
   } 
 };
 
-export const Header = connect(mapStateToProps)(
+export const Header = connect(mapStateToProps,mapDispatchToProps)(
   withTranslation()(withRouter(HeaderComponent))
 );

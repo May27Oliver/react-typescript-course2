@@ -20,3 +20,7 @@ useSelector
 useDispatch
 useContext
 useReducer
+
+middleware:用來處理 side effect 如 api 請求。
+
+Redux-thunk:思路是將獲取 API 的邏輯放入 redux-store 中，避免在每個頁面都呼叫一次 API，節省 api 獲取次數。

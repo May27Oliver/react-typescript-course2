@@ -6,6 +6,11 @@ import 'antd/dist/antd.css';//ant design路徑
 import "./i18n/config";
 import { Provider } from "react-redux";
 import store from './redux/store';
+import axios from 'axios';
+
+//統一管理axios x-icode
+axios.defaults.headers['x-icode']= '213481B9A7C198F9';
+
 ReactDOM.render(
   <React.StrictMode>
     <Provider store = {store}>

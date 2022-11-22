@@ -24,3 +24,9 @@ useReducer
 middleware:用來處理 side effect 如 api 請求。
 
 Redux-thunk:思路是將獲取 API 的邏輯放入 redux-store 中，避免在每個頁面都呼叫一次 API，節省 api 獲取次數。
+
+middlewar: middleware 的概念就是 functional programing 中的複合函式與 curry 化的集合體，透過函式的合併來完成對 action 的處理。
+
+```javascript=
+const middleware = (store)=>(next)=>(action)=>{ }
+```

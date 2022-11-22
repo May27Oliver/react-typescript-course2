@@ -1,21 +1,31 @@
-import { createStore, combineReducers, applyMiddleware } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import languageReducer from './language/languageReducer'
-import recommandProductsReducer from './recommendProducts/recommendProductsReducer'
+import recommendProductsReducer from './recommendProducts/recommendProductsReducer'
 import thunk from 'redux-thunk'
+import { actionLog } from './middlewares/actionLog'
+import { productDetailSlice } from './productDetail/slice'
+import { combineReducers, configureStore } from '@reduxjs/toolkit'
+import { productSearchSlice } from './productSearch/slice'
+import { userSlice } from './user/slice'
 
 const rootReducer = combineReducers({
     language: languageReducer,
-    recommendProducts: recommandProductsReducer,
+    recommendProducts: recommendProductsReducer,
+    productDetail: productDetailSlice.reducer,
+    productSearch: productSearchSlice.reducer,
+    user: userSlice.reducer,
 })
-const store = createStore(rootReducer, applyMiddleware(thunk)); //createStore第一個參數必須給予reducer。
 
-export type RootState = ReturnType<typeof store.getState> //ReturnType可以從函式反向獲得類型
+// const store = createStore(rootReducer, applyMiddleware(thunk, actionLog));
+const store = configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) => {
+      console.log('getDefaultMiddleware',getDefaultMiddleware())
+        return [...getDefaultMiddleware(), actionLog]
+    },
+    devTools: true,
+})
+
+export type RootState = ReturnType<typeof store.getState>
 
 export default store
-
-// import {createStore} from 'redux';
-// import languageReducer from './language/languageReducer';
-
-// const store = createStore(languageReducer);
-
-// export default store;
